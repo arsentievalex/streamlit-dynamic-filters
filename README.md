@@ -17,6 +17,7 @@ How to install and use the package:
 5. Display the filtered dataframe:
     ```dynamic_filters.display_df()```
 
+
 Sample usage:
 
 ```
