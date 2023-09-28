@@ -34,8 +34,7 @@ df = pd.DataFrame(data)
 
 dynamic_filters = DynamicFilters(df, filters=['Region', 'Country', 'City'])
 
-with st.sidebar:
-    dynamic_filters.display_filters()
+dynamic_filters.display_filters(location='sidebar')
 
 dynamic_filters.display_df()
 ```
