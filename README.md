@@ -18,7 +18,7 @@ How to install and use the package:
     ```dynamic_filters.display_df()```
 
 
-##### Sample usage with sidebar filters:
+#### Sample usage with sidebar filters:
 
 ```
 import streamlit as st
@@ -55,7 +55,7 @@ dynamic_filters.display_df()
 Demo GIF:
 <img src="https://i.postimg.cc/x1zDwgwh/dynamic-filters-demo-1.gif"/>   
 
-##### Sample usage with columns:
+#### Sample usage with columns:
 
 ```
 import streamlit as st
