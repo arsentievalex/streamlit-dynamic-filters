@@ -53,7 +53,7 @@ dynamic_filters.display_df()
 ```
 
 Demo GIF:
-<img src="https://i.postimg.cc/mDG8BfK4/multiselect-demo.gif"/>   
+<img src="https://i.postimg.cc/x1zDwgwh/dynamic-filters-demo-1.gif"/>   
 
 Sample usage with columns:
 
