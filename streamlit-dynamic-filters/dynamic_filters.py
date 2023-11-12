@@ -172,9 +172,9 @@ class DynamicFilters:
         if filters_changed:
             st.experimental_rerun()
 
-    def display_df(self):
+    def display_df(self, **kwargs):
         """Renders the filtered dataframe in the main area."""
         # Display filtered DataFrame
-        st.dataframe(self.filter_df())
+        st.dataframe(self.filter_df(), **kwargs)
 
 
