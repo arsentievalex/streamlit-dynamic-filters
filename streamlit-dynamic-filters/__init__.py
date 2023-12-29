@@ -1,2 +1,2 @@
-from .dynamic_filters import DynamicFilters
+from .dynamic_filters import DynamicFilters, DynamicFiltersHierarchical
 
