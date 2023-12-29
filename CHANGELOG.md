@@ -1,3 +1,8 @@
+## 0.1.5 - 28th December 2023
+### Added by kzielins <Krzysztof Zielinski> kzislinsk@gmail.com
+- Hierarchical filter selectors
+- Independent filters with diffrent sessions name
+
 ## 0.1.3 - 28th September
 ### Added
 - Ability to specify filter location in display_filters(). The filters can be either displayed in sidebar, main area or columns.
@@ -14,4 +19,4 @@
 
 ### Fixed
 - The StreamlitApiException that occured when selected values did not exist in the dataset.
-
+- Possibility to have more than one filter 
