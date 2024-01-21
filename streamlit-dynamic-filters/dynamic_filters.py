@@ -36,6 +36,8 @@ class DynamicFilters:
                 The dataframe on which filters are applied.
             filters : list of filters
                 List of columns names in df for which filters are to be created.
+            filters_name: str, optional
+                Name of the filters object in session state.
         """
         self.df = df
         self.filters_name = filters_name
@@ -185,21 +187,41 @@ class DynamicFilters:
 
 
 class DynamicFiltersHierarchical(DynamicFilters):
+    """
+    A class that extends DynamicFilters to create dynamic multi-select filters in Streamlit with hierarchical dependencies.
+
+    This class allows for the creation of filters where the selection in one filter impacts the options available in subsequent filters, forming a hierarchical structure of dependency.
+
+    Inherits from:
+    DynamicFilters - The base class for creating dynamic filters.
+
+    Attributes:
+    Inherits all attributes from DynamicFilters.
+
+    Methods:
+    Extends or overrides the following methods from DynamicFilters.
+    """
 
     def filter_df(self, except_filter=None, except_filter_tab: list = None):
         """
-        Filters the dataframe based on session state values except for the specified filter.
+        Filters the dataframe based on session state values except for specified filters.
+
+        This method extends the filter_df method from DynamicFilters by adding an additional parameter to handle hierarchical dependencies among filters.
 
         Parameters
         ----------
-            except_filter : str, optional
-                The filter name that should be excluded from the current filtering operation.
+        except_filter : str, optional
+            The filter name that should be excluded from the current filtering operation. This is useful when updating filter options dynamically.
+        
+        except_filter_tab : list, optional
+            A list of filter names that should be excluded from the current filtering operation. This is crucial for maintaining hierarchical dependencies.
 
         Returns
         -------
-            DataFrame
-                Filtered dataframe.
+        DataFrame
+            The filtered dataframe based on current selections in session state, excluding specified filters.
         """
+        
         if except_filter_tab is None:
             except_filter_tab = []
         filtered_df = self.df.copy()
