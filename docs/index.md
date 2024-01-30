@@ -65,8 +65,3 @@ Renders the filtered dataframe in the main area.
 ```python
 dynamic_filters.display_df()
 ```
-
-## Usage Notes
-
-- Ensure that the Streamlit app is rerun when filter selections are changed to update the displayed dataframe.
-- The class dynamically updates the session state to reflect the current filter selections.
