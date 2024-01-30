@@ -2,7 +2,7 @@
 [![Open Demo App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://dynamic-filters-demo.streamlit.app/)
 
 Custom component to create dynamic multiselect filters in Streamlit. 
-The filters apply to a dataframe and adjust their values based on the user selection (similar to Google Sheets slicers or Only Relevant Values in Tableau).
+The filters apply to a dataframe and adjust their values based on the user selection (similar to Google Sheets slicers or Only Relevant Values in Tableau). Basic documentation is available at [https://arsentievalex.github.io/streamlit-dynamic-filters/](https://arsentievalex.github.io/streamlit-dynamic-filters/)
 
 How to install and use the package:
 1. Install the package using [pip](https://pypi.org/project/streamlit-dynamic-filters/):
