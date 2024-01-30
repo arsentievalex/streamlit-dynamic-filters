@@ -1,79 +1,72 @@
 
-# Streamlit Dynamic Filters
+# DynamicFilters Class Documentation
 
-Streamlit Dynamic Filters is a Python library that brings advanced, dynamic filtering capabilities to Streamlit applications. It allows users to easily filter data based on multiple criteria with filters that automatically update to reflect the current state of the data.
+`DynamicFilters` is a class in the `streamlit-dynamic-filters` library designed to create dynamic multi-select filters in Streamlit applications. Below is a detailed explanation of its methods, arguments, and usage examples.
 
-## Installation
+## Class Initialization
 
-```bash
-pip install streamlit-dynamic-filters
-```
+### `__init__(self, df, filters, filters_name='filters')`
+Initializes the DynamicFilters object with a dataframe and a list of filters.
 
-## Usage
+#### Parameters:
+- `df` (`DataFrame`): The pandas DataFrame on which filters are applied.
+- `filters` (`list` of `str`): List of column names in `df` for which filters are to be created.
+- `filters_name` (`str`, optional): The key name for storing filters in the Streamlit session state. Default is `'filters'`.
 
-### Basic Example
-
-Here's a simple example to get started with Streamlit Dynamic Filters:
-
+#### Example:
 ```python
-import streamlit as st
 import pandas as pd
 from streamlit_dynamic_filters import DynamicFilters
 
-# Sample data
-data = {
-    'Category': ['Fruit', 'Vegetable', 'Fruit', 'Vegetable'],
-    'Item': ['Apple', 'Carrot', 'Banana', 'Broccoli']
-}
+data = {'Category': ['Fruit', 'Vegetable'], 'Item': ['Apple', 'Carrot']}
 df = pd.DataFrame(data)
-
-# Initialize DynamicFilters
 dynamic_filters = DynamicFilters(df, ['Category', 'Item'])
-
-# Display the filters and the dataframe
-dynamic_filters.display_filters()
-dynamic_filters.display_df()
 ```
 
-### Advanced Usage
+## Methods
 
-#### Hierarchical Filtering
+### `check_state(self)`
+Initializes the session state with filters if not already set.
 
-For hierarchical data (e.g., Country > State > City), use `DynamicFiltersHierarchical`:
+### `filter_df(self, except_filter=None)`
+Filters the dataframe based on session state values except for the specified filter.
 
+#### Parameters:
+- `except_filter` (`str`, optional): The filter name to be excluded from the current filtering operation.
+
+#### Returns:
+- `DataFrame`: Filtered dataframe.
+
+#### Example:
 ```python
-from streamlit_dynamic_filters import DynamicFiltersHierarchical
-
-# Assuming df is a DataFrame with hierarchical data
-dynamic_filters = DynamicFiltersHierarchical(df, ['Country', 'State', 'City'])
-dynamic_filters.display_filters()
-dynamic_filters.display_df()
+filtered_df = dynamic_filters.filter_df(except_filter='Item')
 ```
 
-#### Filters in Sidebar
+### `display_filters(self, location=None, num_columns=0, gap="small")`
+Renders dynamic multiselect filters for user selection.
 
-Place filters in the sidebar:
+#### Parameters:
+- `location` (`str`, optional): Location to display filters. Can be `'sidebar'`, `'columns'`, or `None` (defaulting to main area).
+- `num_columns` (`int`, optional): Number of columns to display filters in when `location` is `'columns'`. Must be 0 (default) or a positive integer.
+- `gap` (`str`, optional): Gap between columns when `location` is `'columns'`. Can be `'small'`, `'medium'`, or `'large'`.
 
+#### Example:
 ```python
 dynamic_filters.display_filters(location='sidebar')
 ```
 
-#### Customizing Number of Columns
+### `display_df(self, **kwargs)`
+Renders the filtered dataframe in the main area.
 
-Display filters in multiple columns:
+#### Keyword Arguments:
+- `kwargs`: Additional keyword arguments to pass to `streamlit.dataframe`.
 
+#### Example:
 ```python
-dynamic_filters.display_filters(location='columns', num_columns=2)
+dynamic_filters.display_df()
 ```
 
-## Contributing
+## Usage Notes
 
-Contributions to the `streamlit-dynamic-filters` library are welcome. Please follow the standard fork, branch, and pull request workflow.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
-## Support
-
-For support and questions, please open an issue in the GitHub repository.
+- Ensure that the Streamlit app is rerun when filter selections are changed to update the displayed dataframe.
+- The class dynamically updates the session state to reflect the current filter selections.
