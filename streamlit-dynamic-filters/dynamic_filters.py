@@ -26,7 +26,8 @@ class DynamicFilters:
         Renders the dynamic filters and the filtered dataframe in Streamlit.
     """
 
-    def __init__(self, df, filters, filters_name='filters'):
+    def __init__(self, df, filters,filters_name='filters'):
+        # st.write('돼나?')
         """
         Constructs all the necessary attributes for the DynamicFilters object.
 
@@ -71,7 +72,7 @@ class DynamicFilters:
                 filtered_df = filtered_df[filtered_df[key].isin(values)]
         return filtered_df
 
-    def display_filters(self, location=None, num_columns=0, gap="small"):
+    def display_filters(self, location=None, num_columns=0, gap="small" , custom_layout_definitions = None):
         """
             Renders dynamic multiselect filters for user selection.
 
@@ -137,41 +138,39 @@ class DynamicFilters:
         if gap not in ['small', 'medium', 'large']:
             raise StreamlitAPIException("gap must be either 'small', 'medium' or 'large'")
 
+
+
+        # 필터 설정 변경 여부 초기화
         filters_changed = False
-
-        # initiate counter and max_value for columns
-        if location == 'columns' and num_columns > 0:
-            counter = 1
-            max_value = num_columns
-            col_list = st.columns(num_columns, gap=gap)
-
-        for filter_name in st.session_state[self.filters_name].keys():
+        # ===================================================================================
+        # # andypsh 2024/02/27 modified code
+        # ===================================================================================
+        for filter_name, (label, column) in custom_layout_definitions.items():
             filtered_df = self.filter_df(filter_name)
             options = filtered_df[filter_name].unique().tolist()
 
-            # Remove selected values that are not in options anymore
+
+            # 선택 가능한 옵션만 유지
             valid_selections = [v for v in st.session_state[self.filters_name][filter_name] if v in options]
             if valid_selections != st.session_state[self.filters_name][filter_name]:
                 st.session_state[self.filters_name][filter_name] = valid_selections
                 filters_changed = True
-
             if location == 'sidebar':
                 with st.sidebar:
-                    selected = st.multiselect(f"Select {filter_name}", sorted(options),
-                                              default=st.session_state[self.filters_name][filter_name])
-            elif location == 'columns' and num_columns > 0:
-                with col_list[counter - 1]:
-                    selected = st.multiselect(f"Select {filter_name}", sorted(options),
+                    selected = st.multiselect(f"Select {label}", options,
                                               default=st.session_state[self.filters_name][filter_name])
 
-                # increase counter and reset to 1 if max_value is reached
-                counter += 1
-                counter = counter % (max_value + 1)
-                if counter == 0:
-                    counter = 1
+            elif location == 'columns' and num_columns > 0:
+                # 지정된 커스텀 열에 멀티셀렉트 위젯 배치
+                with column:
+                    selected = st.multiselect(f"Select {label}", options,
+                                              default=st.session_state[self.filters_name][filter_name],key={label})
+
             else:
-                selected = st.multiselect(f"Select {filter_name}", sorted(options),
-                                          default=st.session_state[self.filters_name][filter_name])
+                selected = st.multiselect(f"Select {label}", extended_options,
+                                          default=st.session_state[self.filters_name][filter_name],
+                                          key = f'{label}_2')
+
 
             if selected != st.session_state[self.filters_name][filter_name]:
                 st.session_state[self.filters_name][filter_name] = selected
@@ -184,6 +183,37 @@ class DynamicFilters:
         """Renders the filtered dataframe in the main area."""
         # Display filtered DataFrame
         st.dataframe(self.filter_df(), **kwargs)
+
+    # ===================================================================================
+    # andypsh 2024/03/15 modified code
+    # ===================================================================================
+    def get_user_selections(self, filter_name):
+        """
+        Returns the options selected by the user for a given filter.
+        If nothing is selected, returns False.
+
+        Parameters:
+        -----------
+        filter_name : str
+            The name of the filter for which user selections are to be retrieved.
+
+        Returns:
+        --------
+        list or False
+            A list of selected options for the specified filter, or False if no selection has been made.
+        """
+        if filter_name not in st.session_state[self.filters_name]:
+            raise ValueError(f"Filter '{filter_name}' does not exist.")
+
+        selected_options = st.session_state[self.filters_name][filter_name]
+
+        # If no option is selected, return False
+        if not selected_options:
+            return False
+        else:
+            return selected_options
+
+
 
 
 class DynamicFiltersHierarchical(DynamicFilters):
@@ -212,7 +242,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
         ----------
         except_filter : str, optional
             The filter name that should be excluded from the current filtering operation. This is useful when updating filter options dynamically.
-        
+
         except_filter_tab : list, optional
             A list of filter names that should be excluded from the current filtering operation. This is crucial for maintaining hierarchical dependencies.
 
@@ -221,7 +251,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
         DataFrame
             The filtered dataframe based on current selections in session state, excluding specified filters.
         """
-        
+
         if except_filter_tab is None:
             except_filter_tab = []
         filtered_df = self.df.copy()
@@ -320,11 +350,11 @@ class DynamicFiltersHierarchical(DynamicFilters):
 
             if location == 'sidebar':
                 with st.sidebar:
-                    selected = st.multiselect(f"Select {filter_name}", sorted(options),
+                    selected = st.multiselect(f"Select {filter_name}", options,
                                               default=st.session_state[self.filters_name][filter_name])
             elif location == 'columns' and num_columns > 0:
                 with col_list[counter - 1]:
-                    selected = st.multiselect(f"Select {filter_name}", sorted(options),
+                    selected = st.multiselect(f"Select {filter_name}", options,
                                               default=st.session_state[self.filters_name][filter_name])
 
                 # increase counter and reset to 1 if max_value is reached
@@ -333,7 +363,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
                 if counter == 0:
                     counter = 1
             else:
-                selected = st.multiselect(f"Select {filter_name}", sorted(options),
+                selected = st.multiselect(f"Select {filter_name}", options,
                                           default=st.session_state[self.filters_name][filter_name])
 
             if selected != st.session_state[self.filters_name][filter_name]:
