@@ -50,6 +50,18 @@ class DynamicFilters:
         #     st.session_state.filters = self.filters
         if self.filters_name not in st.session_state:
             st.session_state[self.filters_name] = self.filters
+            
+    def reset_filters(self):
+        """
+        Resets the current filter.
+
+        Can be called using a button:
+        
+            st.button("Reset Filters", on_click=dynamic_filters.reset_filters)
+            
+        """
+        if self.filters_name in st.session_state:
+            del st.session_state[self.filters_name]
 
     def filter_df(self, except_filter=None):
         """
