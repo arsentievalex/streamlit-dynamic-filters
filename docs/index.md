@@ -28,6 +28,14 @@ dynamic_filters = DynamicFilters(df, ['Category', 'Item'])
 ### `check_state(self)`
 Initializes the session state with filters if not already set.
 
+### `reset_filters(self)`
+Resets the current filter.
+
+#### Example:
+```python
+st.button("Reset Filters", on_click=dynamic_filters.reset_filters)
+```
+
 ### `filter_df(self, except_filter=None)`
 Filters the dataframe based on session state values except for the specified filter.
 
