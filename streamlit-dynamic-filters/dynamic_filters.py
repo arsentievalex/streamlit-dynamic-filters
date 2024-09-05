@@ -1,6 +1,8 @@
+# Code author: https://github.com/arsentievalex/streamlit-dynamic-filters.git
+# Removed "Select" from multiselect
+
 import streamlit as st
 from streamlit.errors import StreamlitAPIException
-import pandas as pd
 
 
 class DynamicFilters:
@@ -83,7 +85,7 @@ class DynamicFilters:
                 filtered_df = filtered_df[filtered_df[key].isin(values)]
         return filtered_df
 
-    def display_filters(self, location=None, num_columns=0, gap="small"):
+    def display_filters(self, location=None, num_columns=0, gap="small", select=True):
         """
             Renders dynamic multiselect filters for user selection.
 
@@ -111,6 +113,12 @@ class DynamicFilters:
                 - 'medium': Moderate gap between columns.
                 - 'large': Maximum gap between columns.
                 Default is 'small'.
+
+            select : bool, optional
+                Specifies the gap between columns when location is set to 'columns'. Accepted values are:
+                - True: Word 'Select' is added before filter_name.
+                - False: filter_name is printed withour word 'Select'.
+                Default is False.
 
             Behavior:
             ---------
@@ -169,12 +177,12 @@ class DynamicFilters:
 
             if location == 'sidebar':
                 with st.sidebar:
-                    selected = st.multiselect(f"Select {filter_name}", sorted(options),
+                    selected = st.multiselect(f"Select {filter_name}" if select else f"{filter_name}", sorted(options),
                                               default=st.session_state[self.filters_name][filter_name],
                                               key=self.filters_name + filter_name)
             elif location == 'columns' and num_columns > 0:
                 with col_list[counter - 1]:
-                    selected = st.multiselect(f"Select {filter_name}", sorted(options),
+                    selected = st.multiselect(f"Select {filter_name}" if select else f"{filter_name}", sorted(options),
                                               default=st.session_state[self.filters_name][filter_name],
                                               key=self.filters_name + filter_name)
 
@@ -184,9 +192,9 @@ class DynamicFilters:
                 if counter == 0:
                     counter = 1
             else:
-                selected = st.multiselect(f"Select {filter_name}", sorted(options),
+                selected = st.multiselect(f"Select {filter_name}" if select else f"{filter_name}", sorted(options),
                                           default=st.session_state[self.filters_name][filter_name],
-                                              key=self.filters_name + filter_name)
+                                          key=self.filters_name + filter_name)
 
             if selected != st.session_state[self.filters_name][filter_name]:
                 st.session_state[self.filters_name][filter_name] = selected
@@ -247,7 +255,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
                 filtered_df = filtered_df[filtered_df[key].isin(values)]
         return filtered_df
 
-    def display_filters(self, location=None, num_columns=0, gap="small"):
+    def display_filters(self, location=None, num_columns=0, gap="small", select=True):
         """
             Renders dynamic multiselect filters for user selection.
 
@@ -275,6 +283,12 @@ class DynamicFiltersHierarchical(DynamicFilters):
                 - 'medium': Moderate gap between columns.
                 - 'large': Maximum gap between columns.
                 Default is 'small'.
+
+            select : bool, optional
+                Specifies the gap between columns when location is set to 'columns'. Accepted values are:
+                - True: Word 'Select' is added before filter_name.
+                - False: filter_name is printed withour word 'Select'.
+                Default is False.
 
             Behavior:
             ---------
@@ -335,12 +349,12 @@ class DynamicFiltersHierarchical(DynamicFilters):
 
             if location == 'sidebar':
                 with st.sidebar:
-                    selected = st.multiselect(f"Select {filter_name}", sorted(options),
+                    selected = st.multiselect(f"Select {filter_name}" if select else f"{filter_name}", sorted(options),
                                               default=st.session_state[self.filters_name][filter_name],
                                               key=self.filters_name + filter_name)
             elif location == 'columns' and num_columns > 0:
                 with col_list[counter - 1]:
-                    selected = st.multiselect(f"Select {filter_name}", sorted(options),
+                    selected = st.multiselect(f"Select {filter_name}" if select else f"{filter_name}", sorted(options),
                                               default=st.session_state[self.filters_name][filter_name],
                                               key=self.filters_name + filter_name)
 
@@ -350,7 +364,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
                 if counter == 0:
                     counter = 1
             else:
-                selected = st.multiselect(f"Select {filter_name}", sorted(options),
+                selected = st.multiselect(f"Select {filter_name}" if select else f"{filter_name}", sorted(options),
                                           default=st.session_state[self.filters_name][filter_name],
                                               key=self.filters_name + filter_name)
 
