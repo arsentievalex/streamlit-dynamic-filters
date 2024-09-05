@@ -1,6 +1,3 @@
-# Code author: https://github.com/arsentievalex/streamlit-dynamic-filters.git
-# Removed "Select" from multiselect
-
 import streamlit as st
 from streamlit.errors import StreamlitAPIException
 
