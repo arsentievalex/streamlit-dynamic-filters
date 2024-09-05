@@ -46,8 +46,6 @@ class DynamicFilters:
 
     def check_state(self):
         """Initializes the session state with filters if not already set."""
-        # if 'filters' not in st.session_state:
-        #     st.session_state.filters = self.filters
         if self.filters_name not in st.session_state:
             st.session_state[self.filters_name] = self.filters
             
@@ -113,7 +111,7 @@ class DynamicFilters:
                 Default is 'small'.
 
             select : bool, optional
-                Specifies the gap between columns when location is set to 'columns'. Accepted values are:
+                Option for filter_name output. Accepted values are:
                 - True: Word 'Select' is added before filter_name.
                 - False: filter_name is printed withour word 'Select'.
                 Default is False.
@@ -283,7 +281,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
                 Default is 'small'.
 
             select : bool, optional
-                Specifies the gap between columns when location is set to 'columns'. Accepted values are:
+                Option for filter_name output. Accepted values are:
                 - True: Word 'Select' is added before filter_name.
                 - False: filter_name is printed withour word 'Select'.
                 Default is False.
@@ -364,7 +362,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
             else:
                 selected = st.multiselect(f"Select {filter_name}" if select else f"{filter_name}", sorted(options),
                                           default=st.session_state[self.filters_name][filter_name],
-                                              key=self.filters_name + filter_name)
+                                          key=self.filters_name + filter_name)
 
             if selected != st.session_state[self.filters_name][filter_name]:
                 st.session_state[self.filters_name][filter_name] = selected
