@@ -114,7 +114,7 @@ class DynamicFilters:
                 Option for filter_name output. Accepted values are:
                 - True: Word 'Select' is added before filter_name.
                 - False: filter_name is printed without word 'Select'.
-                Default is False.
+                Default is True.
 
             Behavior:
             ---------
@@ -284,7 +284,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
                 Option for filter_name output. Accepted values are:
                 - True: Word 'Select' is added before filter_name.
                 - False: filter_name is printed without word 'Select'.
-                Default is False.
+                Default is True.
 
             Behavior:
             ---------
