@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit.errors import StreamlitAPIException
 import pandas as pd
+from streamlit.runtime.scriptrunner_utils.script_run_context import get_script_run_ctx
 
 
 class DynamicFilters:
@@ -50,15 +51,15 @@ class DynamicFilters:
         #     st.session_state.filters = self.filters
         if self.filters_name not in st.session_state:
             st.session_state[self.filters_name] = self.filters
-            
+
     def reset_filters(self):
         """
         Resets the current filter.
 
         Can be called using a button:
-        
+
             st.button("Reset Filters", on_click=dynamic_filters.reset_filters)
-            
+
         """
         if self.filters_name in st.session_state:
             del st.session_state[self.filters_name]
@@ -83,7 +84,7 @@ class DynamicFilters:
                 filtered_df = filtered_df[filtered_df[key].isin(values)]
         return filtered_df
 
-    def display_filters(self, location=None, num_columns=0, gap="small"):
+    def display_filters(self, location=None, num_columns=0, gap="small", rerun_scope = 'auto'):
         """
             Renders dynamic multiselect filters for user selection.
 
@@ -111,6 +112,12 @@ class DynamicFilters:
                 - 'medium': Moderate gap between columns.
                 - 'large': Maximum gap between columns.
                 Default is 'small'.
+
+            rerun_scope : str, optional
+                Species whether the filter should call a global or fragment rerun. Accepted values are:
+                - 'app': Reruns the entire app
+                - 'fragment': Reruns just the fragment
+                - 'auto' : Reruns fragment if possible. Otherwise, reruns the entire app
 
             Behavior:
             ---------
@@ -148,6 +155,9 @@ class DynamicFilters:
             raise StreamlitAPIException("num_columns must be greater than 0 when location is 'columns'")
         if gap not in ['small', 'medium', 'large']:
             raise StreamlitAPIException("gap must be either 'small', 'medium' or 'large'")
+        if rerun_scope not in ['app', 'fragment', 'auto']:
+            raise StreamlitAPIException("`rerun_scope must be either 'app', 'fragment' or 'auto'")
+
 
         filters_changed = False
 
@@ -193,7 +203,9 @@ class DynamicFilters:
                 filters_changed = True
 
         if filters_changed:
-            st.rerun()
+            if rerun_scope == 'auto':
+                rerun_scope = 'fragment' if get_script_run_ctx().current_fragment_id else 'app'
+            st.rerun(scope = rerun_scope)
 
     def display_df(self, **kwargs):
         """Renders the filtered dataframe in the main area."""
@@ -227,7 +239,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
         ----------
         except_filter : str, optional
             The filter name that should be excluded from the current filtering operation. This is useful when updating filter options dynamically.
-        
+
         except_filter_tab : list, optional
             A list of filter names that should be excluded from the current filtering operation. This is crucial for maintaining hierarchical dependencies.
 
@@ -236,7 +248,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
         DataFrame
             The filtered dataframe based on current selections in session state, excluding specified filters.
         """
-        
+
         if except_filter_tab is None:
             except_filter_tab = []
         filtered_df = self.df.copy()
@@ -247,7 +259,7 @@ class DynamicFiltersHierarchical(DynamicFilters):
                 filtered_df = filtered_df[filtered_df[key].isin(values)]
         return filtered_df
 
-    def display_filters(self, location=None, num_columns=0, gap="small"):
+    def display_filters(self, location=None, num_columns=0, gap="small", rerun_scope = 'auto' ):
         """
             Renders dynamic multiselect filters for user selection.
 
@@ -275,6 +287,13 @@ class DynamicFiltersHierarchical(DynamicFilters):
                 - 'medium': Moderate gap between columns.
                 - 'large': Maximum gap between columns.
                 Default is 'small'.
+
+            rerun_scope : str, optional
+                Species whether the filter should call a global or fragment rerun. Accepted values are:
+                - 'app': Reruns the entire app
+                - 'fragment': Reruns just the fragment
+                - 'auto' : Reruns fragment if possible. Otherwise, reruns the entire app
+
 
             Behavior:
             ---------
@@ -312,6 +331,9 @@ class DynamicFiltersHierarchical(DynamicFilters):
             raise StreamlitAPIException("num_columns must be greater than 0 when location is 'columns'")
         if gap not in ['small', 'medium', 'large']:
             raise StreamlitAPIException("gap must be either 'small', 'medium' or 'large'")
+        if rerun_scope not in ['app', 'fragment', 'auto']:
+            raise StreamlitAPIException("`rerun_scope must be either 'app', 'fragment' or 'auto'")
+
 
         filters_changed = False
 
@@ -359,7 +381,9 @@ class DynamicFiltersHierarchical(DynamicFilters):
                 filters_changed = True
 
         if filters_changed:
-            st.rerun()
+            if rerun_scope == 'auto':
+                rerun_scope = 'fragment' if get_script_run_ctx().current_fragment_id else 'app'
+            st.rerun(scope = rerun_scope)
 
     def display_df(self, **kwargs):
         """Renders the filtered dataframe in the main area."""
