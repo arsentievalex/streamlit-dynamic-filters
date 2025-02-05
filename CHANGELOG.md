@@ -3,11 +3,14 @@
 - Implemented rerun_scope and automatic fragment detection (contributed by @tabedzki)
 
 ## 0.1.9 - 2nd August 2024
-#### Added
+### Added
 - Key for each elements in filters, so that multiple DynamicFilters can be used in one app (contribution by @vikashgraja)
 - reset_filters function (contribution by @ragchuck)
 
-
+## 0.1.8 - 1st August 2024
+### Added
+- Key for each elements in filters, so that multiple DynamicFilters can be used in one app (contribution by @vikashgraja)
+- reset_filters function (contribution by @ragchuck)
 
 ## 0.1.6 - 27th March 2024
 ### Added
